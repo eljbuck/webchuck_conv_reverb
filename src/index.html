@@ -1,0 +1,245 @@
+<!--     based off of tutorials by Mike Mulshine et al
+    dependencies were in https://ccrma.stanford.edu/courses/220a-fall-2023/static/webchuck/webapp//
+    dependencies now in https://ccrma.stanford.edu/courses/220a-fall-2023/static/webchuck/webapp//
+-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!--- make responsive for mobile devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<!--- Include the ACE editor and webchuck stuff -->
+  <link rel="stylesheet" href="https://ccrma.stanford.edu/courses/220a-fall-2023/static/webchuck/webapp//css/editor.css">
+  <script type="text/javascript" src="https://ccrma.stanford.edu/courses/220a-fall-2023/static/webchuck/webapp//js/ace.js" charset="utf-8"></script>
+  <script type="text/javascript" src="https://ccrma.stanford.edu/courses/220a-fall-2023/static/webchuck/webapp//js/editor.js"></script>
+  <script type="text/javascript" src="https://ccrma.stanford.edu/courses/220a-fall-2023/static/webchuck/webapp//js/defer.js"></script>
+  <script type="text/javascript" src="https://ccrma.stanford.edu/courses/220a-fall-2023/static/webchuck/webapp//js/webchuck_host.js"></script>
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    audio {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+</style>
+</head>
+
+<h2> Chuck + WebAudio Convolutional Reverb </h2>
+<p>Here is a simple convolutional reverb implementation within Chuck using the Web Audio API Convolver node.</p>
+<p>
+  <label for="impulseSelect">Select Impulse Response:</label>
+  <select id="impulseSelect">
+    <option value="https://ccrma.stanford.edu/~eljbuck/220a/final/IRs/ballroom.wav">Ballroom</option>
+    <option value="https://ccrma.stanford.edu/~eljbuck/220a/final/IRs/control_room.wav">Control Room</option>
+    <option value="https://ccrma.stanford.edu/~eljbuck/220a/final/IRs/studio_room.wav">Studio Room</option>
+    <option value="https://ccrma.stanford.edu/~eljbuck/220a/final/IRs/listening_room.wav">Listening Room</option>
+    <option value="https://ccrma.stanford.edu/~eljbuck/220a/final/IRs/bathroom.wav">Bathroom</option>
+    <option value="https://ccrma.stanford.edu/~eljbuck/220a/final/IRs/lobby.wav">Lobby</option>
+    <option value="https://ccrma.stanford.edu/~eljbuck/220a/final/IRs/stage.wav">Stage</option>
+    <option value="https://ccrma.stanford.edu/~eljbuck/220a/final/IRs/outside.wav">Outside</option>
+    <option value="https://ccrma.stanford.edu/~eljbuck/220a/final/IRs/stairs.wav">Stairs</option>
+    <!-- Add more options as needed -->
+  </select>
+  <button id="playButton">Play Convolved Reference Recording</button>
+</p>
+
+//////////////////////////////////////////////////// <br>
+live code
+<pre><div id="editor1" class="ace_editor ace_hidpi ace-chuck">  // Reference recording
+  SinOsc sin => ADSR adsr => dac;
+  adsr.releaseTime(400::ms);
+  sin.gain(0.1);
+  sin.freq(440);
+
+  // time loop
+  while( true )
+  {
+    adsr.keyOn();
+    2::second => now;
+    adsr.keyOff();
+    2::second => now;
+  }
+
+</div></pre>
+
+<p>
+<input id="startButton" type="button" value="Start" /> 
+<input id="stopButton" type="button" value="Stop" /> <br/><br/>
+</p>
+  <h1>IRs</h1>
+<!-- Audio Player 1 -->
+<label for="player1">Ballroom:</label>
+<audio id="player1" controls>
+    <source src="https://ccrma.stanford.edu/~eljbuck/220a/final/IRs/ballroom.wav" type="audio/wav">
+    Your browser does not support the audio element.
+</audio>
+
+<!-- Audio Player 2 -->
+<label for="player2">Control Room:</label>
+<audio id="player2" controls>
+    <source src="https://ccrma.stanford.edu/~eljbuck/220a/final/IRs/control_room.wav" type="audio/wav">
+    Your browser does not support the audio element.
+</audio>
+
+<!-- Audio Player 3 -->
+<label for="player3">Studio Room:</label>
+<audio id="player3" controls>
+    <source src="https://ccrma.stanford.edu/~eljbuck/220a/final/IRs/studio_room.wav" type="audio/wav">
+    Your browser does not support the audio element.
+</audio>
+
+<!-- Audio Player 4 -->
+<label for="player4">Listening Room:</label>
+<audio id="player4" controls>
+    <source src="https://ccrma.stanford.edu/~eljbuck/220a/final/IRs/listening_room.wav" type="audio/wav">
+    Your browser does not support the audio element.
+</audio>
+
+<!-- Audio Player 5 -->
+<label for="player5">Bathroom:</label>
+<audio id="player5" controls>
+    <source src="https://ccrma.stanford.edu/~eljbuck/220a/final/IRs/bathroom.wav" type="audio/wav">
+    Your browser does not support the audio element.
+</audio>
+
+<!-- Audio Player 6 -->
+<label for="player6">Lobby:</label>
+<audio id="player6" controls>
+    <source src="https://ccrma.stanford.edu/~eljbuck/220a/final/IRs/lobby.wav" type="audio/wav">
+    Your browser does not support the audio element.
+</audio>
+
+<!-- Audio Player 7 -->
+<label for="player7">Stage:</label>
+<audio id="player7" controls>
+    <source src="https://ccrma.stanford.edu/~eljbuck/220a/final/IRs/stage.wav" type="audio/wav">
+    Your browser does not support the audio element.
+</audio>
+
+<!-- Audio Player 8 -->
+<label for="player8">Outside:</label>
+<audio id="player8" controls>
+    <source src="https://ccrma.stanford.edu/~eljbuck/220a/final/IRs/outside.wav" type="audio/wav">
+    Your browser does not support the audio element.
+</audio>
+
+<!-- Audio Player 9 -->
+<label for="player9">Stairs:</label>
+<audio id="player9" controls>
+    <source src="https://ccrma.stanford.edu/~eljbuck/220a/final/IRs/stairs.wav" type="audio/wav">
+    Your browser does not support the audio element.
+</audio>
+
+<script>
+  let convolver;
+    async function prep() {
+        //await preloadFilenames( serverFilesToPreload );
+        await startChuck();
+        // theChuck.connect(audioCtxt.destination)
+        // audioCtxt.resume();
+        await theChuckReady;
+        theChuck.removeLastCode();
+    }
+
+    async function createReverb(impulsePath, audioC) {
+    let convolver = audioC.createConvolver();
+ 
+    // load impulse response from file
+    let response = await fetch(impulsePath);
+    let arraybuffer = await response.arrayBuffer();
+    convolver.buffer = await audioC.decodeAudioData(arraybuffer);
+ 
+    return convolver;
+  }
+
+  async function convolve() {
+    if (convolver) {
+        convolver.disconnect();
+        convolver = null;
+    }
+    let impulseSelect = document.getElementById("impulseSelect");
+    let selectedImpulsePath = impulseSelect.options[impulseSelect.selectedIndex].value;
+    console.log(selectedImpulsePath);
+    convolver = convolver || await createReverb(selectedImpulsePath, audioContext);
+
+    return convolver;
+  }
+
+  async function convolveAudio() {
+    var audioCtx = new AudioContext();
+    // Disconnect the previous convolver node if it exists
+    if (convolver) {
+    convolver.disconnect();
+    convolver = null;
+    }
+
+    // Get the selected impulse response path from the dropdown menu
+    let impulseSelect = document.getElementById("impulseSelect");
+    let selectedImpulsePath = impulseSelect.options[impulseSelect.selectedIndex].value;
+    console.log(selectedImpulsePath);
+
+    // Create or update the convolver with the selected impulse response
+    convolver = convolver || await createReverb(selectedImpulsePath, audioCtx);
+      // Create an audio buffer source
+    let source = audioCtx.createBufferSource();
+
+    // Load your audio file
+    let audioFileResponse = await fetch("https://ccrma.stanford.edu/~eljbuck/220a/final/reference.wav");
+    let audioFileArrayBuffer = await audioFileResponse.arrayBuffer();
+    let audioBuffer = await audioCtx.decodeAudioData(audioFileArrayBuffer);
+
+    // Set the buffer for the audio source
+    source.buffer = audioBuffer;
+
+    // Connect the nodes: source -> convolver -> destination
+    source.connect(convolver);
+    convolver.connect(audioCtx.destination);
+
+    // Start playing the audio source
+    source.start();
+  }
+
+var editor1 = newChuckEditor("editor1");
+
+var prependCode = `//  none needed
+`;
+
+var startButton = document.getElementById( "startButton" );
+var stopButton = document.getElementById( "stopButton" );
+
+stopButton.disabled = true;
+startButton.style.height = '60px';
+startButton.style.width= '120px';
+stopButton.style.height = '60px';
+stopButton.style.width= '120px';
+
+
+
+startButton.addEventListener( "click", async function() {
+  await prep();
+  convolver = await convolve();
+  theChuck.connect(convolver);
+  convolver.connect(audioContext.destination);
+  await theChuck.runCode(prependCode+editor1.getValue());
+  stopButton.disabled = false;
+  startButton.value = "Replace";
+});
+
+stopButton.addEventListener( "click", async function() {
+  await theChuck.removeLastCode();
+});
+
+// Add an event listener to the play button
+document.getElementById("playButton").addEventListener("click", convolveAudio);
+</script>
